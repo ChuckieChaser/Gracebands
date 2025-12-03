@@ -1,0 +1,13 @@
+.background-image {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+
+    background: radial-gradient(ellipse at center, rgba(16, 16, 23, 0), rgba(16, 16, 23, 0.5)), linear-gradient(rgba(16, 16, 23, 0.5), rgba(16, 16, 23, 0.5)), url('background.jpg');
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: 125%;
+    background-position: 0% 15%;
+
+    transition: all 0.1s linear;
+}

@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+
+@import 'tailwindcss';
+
+@theme {
+    /* *** COLOR PALETTE *** */
+    --color-primary: #4e44ee;
+    --color-secondary: #ee44d9;
+    --color-gradient: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+
+    --color-background: #101017;
+    --color-surface: #1d1d24;
+
+    --color-border: #2c2c35;
+
+    --color-text: #f5f5f5;
+    --color-text-gradient: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-primary));
+    --color-text-muted: #a0a0a9;
+
+    --color-success: #1db954;
+    --color-warning: #d93a3a;
+    --color-error: #ffc700;
+
+    /* *** TYPOGRAPHY *** */
+    --font-heading: 'Fraunces', serif;
+    --font-body: 'Urbanist', sans-serif;
+
+    /* *** SHADOWS *** */
+    --shadow-surface: var(--shadow-sm);
+    --shadow-text: var(--text-shadow-sm);
+}
+
+@layer base {
+    html {
+        @apply h-full scroll-smooth;
+    }
+
+    body {
+        @apply bg-background text-text font-body h-full leading-normal tracking-wide;
+    }
+
+    #root {
+        @apply flex h-full flex-col;
+    }
+}

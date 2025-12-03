@@ -1,0 +1,101 @@
+.button {
+    cursor: pointer;
+
+    padding: 0.5em 1em;
+    font-weight: bold;
+
+    &,
+    & > * {
+        transition: all 0.3s ease;
+    }
+}
+
+.button-default {
+    border: 2px solid var(--color-text);
+
+    &:hover {
+        background-color: var(--color-text);
+        color: transparent;
+    }
+}
+
+.button-default span {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    background-clip: text;
+
+    -webkit-background-clip: text;
+}
+
+.button-primary {
+    border-radius: 0.5rem;
+}
+
+.button-secondary {
+    border-radius: 0.5rem;
+}
+
+.button-cta {
+    position: relative;
+    border-radius: 0.5rem;
+
+    &:hover {
+        box-shadow:
+            0 0 8px var(--color-primary),
+            0 0 16px var(--color-secondary);
+    }
+
+    &:hover::before {
+        opacity: 0;
+    }
+
+    &:hover span {
+        color: transparent;
+    }
+}
+
+.button-cta::before {
+    pointer-events: none;
+    opacity: 1;
+
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+
+    border-radius: inherit;
+    transition: all 0.3s ease;
+}
+
+.button-cta::after {
+    pointer-events: none;
+
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+
+    padding: 2px;
+
+    border-radius: inherit;
+
+    mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+}
+
+.button-cta span {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    background-clip: text;
+
+    -webkit-background-clip: text;
+}

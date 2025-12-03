@@ -1,0 +1,42 @@
+.heading {
+    display: inline;
+
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: bold;
+
+    letter-spacing: 0.05rem;
+    text-shadow: var(--shadow-text);
+}
+
+.heading-default {
+    color: var(--color-text);
+}
+
+.heading-primary {
+    color: var(--color-primary);
+}
+
+.heading-secondary {
+    color: var(--color-secondary);
+}
+
+.heading-animated {
+    background: var(--color-text-gradient);
+    background-size: 5000% 100%;
+    background-clip: text;
+
+    -webkit-background-clip: text;
+
+    color: transparent;
+    animation: gradient-sweep 10s linear infinite;
+}
+
+@keyframes gradient-sweep {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
