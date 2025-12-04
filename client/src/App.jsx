@@ -3,12 +3,14 @@ import { motion } from 'framer-motion';
 
 import { AppHeader } from './components/common/app-header/AppHeader';
 import { HomeLayout } from './layouts/HomeLayout';
+import { ShopLayout } from './layouts/ShopLayout';
 
 import { BackgroundImage } from './components/common/background-image/BackgroundImage';
 import { Heading } from './components/ui/heading/Heading';
 import { GalleryCard } from './components/common/gallery-card/GalleryCard';
 import { HeroSection } from './components/common/hero-section/HeroSection';
 import { ImageCard } from './components/common/image-card/ImageCard';
+import { ItemCard } from './components/common/item-card/ItemCard';
 import { TextCard } from './components/common/text-card/TextCard';
 
 import { Button } from './components/ui/button/Button';
@@ -19,14 +21,26 @@ import placeholder from './assets/placeholder.png';
 
 export const App = () => {
     const navigationLink = ['Home', 'Products', 'About', 'Team', 'Shop'];
+
+    const [isShopActive, setIsShopActive] = useState(false);
     const [activeLink, setActiveLink] = useState('Home');
+
     const handleNavigationClick = (event, link) => {
         event.preventDefault();
+
+        if (link === 'Shop') {
+            setIsShopActive(true);
+            setActiveLink('Shop');
+            return;
+        }
+
+        if (isShopActive) setIsShopActive(false);
 
         const section = document.getElementById(link.toLowerCase());
         if (!section) return;
 
-        section.scrollIntoView();
+        setTimeout(() => section.scrollIntoView(), isShopActive ? 100 : 0);
+        setActiveLink(link);
     };
 
     useSectionObserver(setActiveLink);
@@ -35,7 +49,7 @@ export const App = () => {
             <BackgroundImage initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.3 }} />
 
             {/* Why [delay: 4.8]? I don't freakin' know */}
-            <AppHeader initial={{ opacity: 0, y: -80 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.3 }}>
+            <AppHeader className={isShopActive ? 'bg-surface' : ''} initial={{ opacity: 0, y: -80 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.3 }}>
                 <section className="flex flex-1 items-center gap-2">
                     <img className="h-12 w-12 rounded-full" src={placeholder} alt="Company Logo" />
                     <Heading text="GRACEBANDS" variant="animated" />
@@ -59,9 +73,9 @@ export const App = () => {
                 </section>
             </AppHeader>
 
-            <HomeLayout>
-                <div id="home" className="h-dvh" data-section="Home">
-                    <HeroSection />
+            <HomeLayout isShopActive={isShopActive}>
+                <div id="home" className="relative h-dvh" data-section="Home">
+                    <HeroSection setIsShopActive={setIsShopActive} setActiveLink={setActiveLink} />
                 </div>
 
                 <div id="products" className="bg-background flex h-fit flex-col items-center justify-center" data-section="Products">
@@ -151,9 +165,9 @@ export const App = () => {
 
                     <section className="flex flex-col items-center gap-8 px-32 py-16">
                         <motion.img className="transitio-all h-[50vh] w-[50vw] rounded-lg object-cover duration-300 hover:scale-105" src={placeholder} alt="The Team" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.3 }} />
-                        <Heading className="text-center text-5xl!" text="GRACE BAND" variant="primary" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.6 }} />
+                        <Heading className="text-center text-5xl!" text="GRACE BAND" variant="primary" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.3 }} />
 
-                        <motion.p className="w-[75vh]" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.6 }}>
+                        <motion.p className="w-[75vh]" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.3 }}>
                             GraceBands is the passion project of a small team of artisans and fashion enthusiasts who believe in the power of handmade accessories to define personal style. The creators are driven by a commitment to quality and individuality, meticulously selecting custom fabrics and
                             ensuring every headband is crafted to be comfortable, durable, and chic. Drawing inspiration from modern trends and classic elegance, their goal is to translate simple textile artistry into functional, attractive pieces that empower wearers to express themselves
                             effortlessly, making GraceBands a true labor of love born from creativity and attention to detail.
@@ -161,6 +175,25 @@ export const App = () => {
                     </section>
                 </div>
             </HomeLayout>
+
+            <ShopLayout isShopActive={isShopActive}>
+                <motion.section className="flex w-full justify-between" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.3 }}>
+                    <Heading className="text-5xl!" text="✦ THE SHOP ✦" variant="animated" />
+                    <Button className="h-12 w-28" text="Cart" variant="primary" />
+                </motion.section>
+
+                <motion.section className="bg-surface grid h-full w-full grid-cols-4 grid-rows-2 gap-8 rounded-lg p-8 shadow-sm" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.3 }}>
+                    <ItemCard itemName="Headband" itemSrc={placeholder} itemCost="₱100.00" />
+                    <ItemCard itemName="Headband" itemSrc={placeholder} itemCost="₱100.00" />
+                    <ItemCard itemName="Headband" itemSrc={placeholder} itemCost="₱100.00" />
+                    <ItemCard itemName="Headband" itemSrc={placeholder} itemCost="₱100.00" />
+
+                    <ItemCard itemName="Headband" itemSrc={placeholder} itemCost="₱100.00" />
+                    <ItemCard itemName="Headband" itemSrc={placeholder} itemCost="₱100.00" />
+                    <ItemCard itemName="Headband" itemSrc={placeholder} itemCost="₱100.00" />
+                    <ItemCard itemName="Headband" itemSrc={placeholder} itemCost="₱100.00" />
+                </motion.section>
+            </ShopLayout>
         </>
     );
 };
