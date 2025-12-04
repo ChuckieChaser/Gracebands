@@ -45,6 +45,41 @@ export const App = () => {
     };
 
     useSectionObserver(setActiveLink);
+
+    const [isCartOpen, setIsCartOpen] = useState(false);
+
+    const SAMPLE_PRODUCTS = [
+        { id: 1, name: 'Headband 1', src: placeholder, cost: 100.0 },
+        { id: 2, name: 'Headband 2', src: placeholder, cost: 120.0 },
+        { id: 3, name: 'Headband 3', src: placeholder, cost: 140.0 },
+    ];
+
+    const [cartItems, setCartItems] = useState([]);
+    const handleAddToCart = (product) => {
+        const existingItem = cartItems.find((item) => item.id === product.id);
+        if (existingItem) {
+            setCartItems(cartItems.map((item) => (item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item)));
+        } else {
+            const newItem = {
+                id: product.id,
+                name: product.name,
+                price: product.cost,
+                quantity: 1,
+            };
+            setCartItems([...cartItems, newItem]);
+        }
+    };
+
+    const handleRemoveFromCart = (idToRemove) => {
+        setCartItems(cartItems.filter((item) => item.id !== idToRemove));
+    };
+
+    const handleClearCart = () => {
+        setCartItems([]);
+    };
+
+    const totalQuantity = cartItems.reduce((totalAcc, item) => totalAcc + item.quantity, 0);
+
     return (
         <>
             <BackgroundImage initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.3 }} />
@@ -181,16 +216,16 @@ export const App = () => {
             <ShopLayout isShopActive={isShopActive}>
                 <motion.section className="flex w-full justify-between" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.3 }}>
                     <Heading className="text-5xl!" text="✦ THE SHOP ✦" variant="animated" />
-                    <Button className="h-12 w-28" text="Cart" variant="primary" />
+                    <Button className="h-12 w-28" text={totalQuantity > 0 ? `Cart (${totalQuantity})` : 'Cart'} variant="primary" onClick={() => setIsCartOpen(true)} />
                 </motion.section>
 
                 <motion.section className="flex h-full w-full items-center justify-around rounded-lg shadow-sm" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.3 }}>
-                    <ItemCard itemName="Headband 1" itemSrc={placeholder} itemCost="₱100.00" />
-                    <ItemCard itemName="Headband 2" itemSrc={placeholder} itemCost="₱120.00" />
-                    <ItemCard itemName="Headband 3" itemSrc={placeholder} itemCost="₱140.00" />
+                    {SAMPLE_PRODUCTS.map((product) => (
+                        <ItemCard key={product.id} itemName={product.name} itemSrc={product.src} itemCost={`₱${product.cost.toFixed(2)}`} addToCart={() => handleAddToCart(product)} />
+                    ))}
                 </motion.section>
 
-                <CartModal />
+                {isCartOpen && <CartModal items={cartItems} onClose={() => setIsCartOpen(false)} onRemove={handleRemoveFromCart} clearCart={handleClearCart} />}
             </ShopLayout>
         </>
     );
