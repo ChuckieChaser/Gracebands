@@ -4,8 +4,8 @@ import { Button } from '../../ui/button/Button';
 
 export const ItemCard = ({ itemName, itemSrc, itemCost }) => {
     return (
-        <motion.div className="bg-background flex h-full w-full flex-col gap-4 rounded-lg p-4 shadow-lg">
-            <img src={itemSrc} alt={`${itemName} image`} />
+        <motion.div className="bg-surface flex h-fit w-80 flex-col gap-4 rounded-lg p-4 shadow-lg">
+            <img className="h-full w-full object-cover" src={itemSrc} alt={`${itemName} image`} />
 
             <section className="flex items-center justify-between">
                 <Heading text={itemName} />

@@ -11,6 +11,7 @@ import { GalleryCard } from './components/common/gallery-card/GalleryCard';
 import { HeroSection } from './components/common/hero-section/HeroSection';
 import { ImageCard } from './components/common/image-card/ImageCard';
 import { ItemCard } from './components/common/item-card/ItemCard';
+import { CartModal } from './components/common/cart-modal/CartModal';
 import { TextCard } from './components/common/text-card/TextCard';
 
 import { Button } from './components/ui/button/Button';
@@ -176,23 +177,20 @@ export const App = () => {
                 </div>
             </HomeLayout>
 
+            {/* I left the shop checkout, the email address for the ticket and the cart items not fully implement */}
             <ShopLayout isShopActive={isShopActive}>
                 <motion.section className="flex w-full justify-between" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.3 }}>
                     <Heading className="text-5xl!" text="✦ THE SHOP ✦" variant="animated" />
                     <Button className="h-12 w-28" text="Cart" variant="primary" />
                 </motion.section>
 
-                <motion.section className="bg-surface grid h-full w-full grid-cols-4 grid-rows-2 gap-8 rounded-lg p-8 shadow-sm" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.3 }}>
-                    <ItemCard itemName="Headband" itemSrc={placeholder} itemCost="₱100.00" />
-                    <ItemCard itemName="Headband" itemSrc={placeholder} itemCost="₱100.00" />
-                    <ItemCard itemName="Headband" itemSrc={placeholder} itemCost="₱100.00" />
-                    <ItemCard itemName="Headband" itemSrc={placeholder} itemCost="₱100.00" />
-
-                    <ItemCard itemName="Headband" itemSrc={placeholder} itemCost="₱100.00" />
-                    <ItemCard itemName="Headband" itemSrc={placeholder} itemCost="₱100.00" />
-                    <ItemCard itemName="Headband" itemSrc={placeholder} itemCost="₱100.00" />
-                    <ItemCard itemName="Headband" itemSrc={placeholder} itemCost="₱100.00" />
+                <motion.section className="flex h-full w-full items-center justify-around rounded-lg shadow-sm" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.3 }}>
+                    <ItemCard itemName="Headband 1" itemSrc={placeholder} itemCost="₱100.00" />
+                    <ItemCard itemName="Headband 2" itemSrc={placeholder} itemCost="₱120.00" />
+                    <ItemCard itemName="Headband 3" itemSrc={placeholder} itemCost="₱140.00" />
                 </motion.section>
+
+                <CartModal />
             </ShopLayout>
         </>
     );
