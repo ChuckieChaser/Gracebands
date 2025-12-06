@@ -5,9 +5,7 @@ import placeholder from '../../../assets/placeholder.png';
 import react from '../../../assets/react.svg';
 import vite from '/vite.svg';
 
-const images = [placeholder, react, vite, placeholder, react, vite];
-
-export const GalleryCard = ({ className, ...rest }) => {
+export const GalleryCard = ({ images, className, ...rest }) => {
     const GalleryColumn = ({ images, direction = 'up', duration = 20, ease = 'linear', repeat = Infinity, repeatType = 'loop' }) => {
         const columnRef = useRef(null);
         const [height, setHeight] = useState(0);

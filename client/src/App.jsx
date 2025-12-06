@@ -18,7 +18,21 @@ import { Button } from './components/ui/button/Button';
 
 import { useSectionObserver } from './hooks/useSectionObserver';
 
+import logo from './assets/logo.png';
+
 import placeholder from './assets/placeholder.png';
+import ponytails from './assets/image1.jpg';
+import scrunchies from './assets/image2.jpg';
+import headband from './assets/image3.jpg';
+
+import waimage from './assets/wawa.jpg';
+import waimage2 from './assets/wiwi.jpg';
+
+import image1 from './assets/qwerty.png';
+import image2 from './assets/qwerty2.png';
+import image3 from './assets/qwerty3.png';
+
+const images = [image1, image2, image3, waimage, waimage2, ponytails, scrunchies, headband];
 
 export const App = () => {
     const navigationLink = ['Home', 'Products', 'About', 'Team', 'Shop'];
@@ -49,9 +63,9 @@ export const App = () => {
     const [isCartOpen, setIsCartOpen] = useState(false);
 
     const SAMPLE_PRODUCTS = [
-        { id: 1, name: 'Headband 1', src: placeholder, cost: 100.0 },
-        { id: 2, name: 'Headband 2', src: placeholder, cost: 120.0 },
-        { id: 3, name: 'Headband 3', src: placeholder, cost: 140.0 },
+        { id: 1, name: 'Ponytails', src: ponytails, cost: 35.0 },
+        { id: 2, name: 'Scrunchies', src: scrunchies, cost: 35.0 },
+        { id: 3, name: 'Headband', src: headband, cost: 50.0 },
     ];
 
     const [cartItems, setCartItems] = useState([]);
@@ -87,7 +101,7 @@ export const App = () => {
             {/* Why [delay: 4.8]? I don't freakin' know */}
             <AppHeader className={isShopActive ? 'bg-surface' : ''} initial={{ opacity: 0, y: -80 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.3 }}>
                 <section className="flex flex-1 items-center gap-2">
-                    <img className="h-12 w-12 rounded-full" src={placeholder} alt="Company Logo" />
+                    <img className="h-12 w-12 rounded-full" src={logo} alt="Company Logo" />
                     <Heading text="GRACEBANDS" variant="animated" />
                 </section>
 
@@ -118,7 +132,7 @@ export const App = () => {
                     <Heading className="border-text w-full border-y-2 p-8 text-center text-5xl!" text="✦ OUR PRODUCTS ✦" variant="animated" />
 
                     <section className="flex items-center justify-center gap-30 p-16">
-                        <GalleryCard initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.3 }} />
+                        <GalleryCard images={images} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.3 }} />
 
                         <motion.div className="flex h-152 w-138 flex-col" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.3 }}>
                             <section className="hover:bg-secondary flex flex-1 items-center p-8 transition-all duration-300 hover:pl-16">
@@ -177,7 +191,7 @@ export const App = () => {
 
                         <ImageCard
                             className="col-span-2 row-span-1"
-                            src={placeholder}
+                            src={waimage}
                             description="GraceBands offers stylish, durable headbands that combine minimalistic flair with eye-catching designs, delivering high-quality, custom-made pieces that let you express your personality effortlessly during summer adventures."
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -186,7 +200,7 @@ export const App = () => {
 
                         <ImageCard
                             className="col-span-2 row-span-1"
-                            src={placeholder}
+                            src={waimage2}
                             description="GraceBands are handmade headbands that combine comfort with contemporary style, offering a rotating selection of bold and trendy fabrics. Perfect for everyday wear or summer statements, they effortlessly elevate your look with chic, versatile elegance."
                             end={true}
                             initial={{ opacity: 0, y: 30 }}

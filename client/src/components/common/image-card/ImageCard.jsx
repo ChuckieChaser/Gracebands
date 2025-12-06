@@ -7,13 +7,13 @@ export const ImageCard = ({ className, src, description, end = false, ...rest })
             {end && (
                 <React.Fragment>
                     <span className="px-16">{description}</span>
-                    <img className="h-60 w-60" src={src} alt={`${src} image`} />
+                    <img className="h-60 w-60 object-cover" src={src} alt={`${src} image`} />
                 </React.Fragment>
             )}
 
             {!end && (
                 <React.Fragment>
-                    <img className="h-60 w-60" src={src} alt={`${src} image`} />
+                    <img className="h-60 w-60 object-cover" src={src} alt={`${src} image`} />
                     <span className="px-16">{description}</span>
                 </React.Fragment>
             )}
