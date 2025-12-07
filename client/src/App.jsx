@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 
 import { AppHeader } from './components/common/app-header/AppHeader';
@@ -34,6 +34,54 @@ import image3 from './assets/qwerty3.png';
 
 const images = [image1, image2, image3, waimage, waimage2, ponytails, scrunchies, headband];
 
+// 💡 CHANGE: Updated component to show itemized list and cleaned up text formatting.
+const OrderStatusSection = ({ orders }) => {
+    // Only render if there are orders to track
+    if (orders.length === 0) return null;
+
+    return (
+        <motion.section className="bg-surface border-border flex w-full max-w-7xl flex-col gap-4 rounded-lg border-2 p-6" initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <Heading text="Tracking Your Orders 📦" variant="secondary" className="text-3xl! font-bold" />
+            <div className="flex max-h-64 flex-col gap-4 overflow-y-auto pr-2">
+                {orders.map((order) => (
+                    <motion.div
+                        key={order.id}
+                        className={`rounded-lg p-4 shadow-md transition-colors duration-300 ${order.currentStatus === 'Delivered' ? 'border-green-500 bg-green-100' : order.currentStatus === 'Shipping' ? 'border-yellow-500 bg-yellow-100' : 'bg-surface-light border-border'}`}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <h4 className="text-text-default flex items-center justify-between text-lg font-bold">
+                            Order #{order.id}
+                            <span className={`rounded-full px-3 py-1 text-sm font-medium ${order.currentStatus === 'Delivered' ? 'bg-green-500 text-white' : order.currentStatus === 'Shipping' ? 'bg-yellow-500 text-black' : 'bg-primary text-white'}`}>{order.currentStatus}</span>
+                        </h4>
+
+                        {/* ORDER DETAILS */}
+                        <div className="text-text-default mt-2 text-sm">
+                            <p>
+                                Total: ₱{order.total.toFixed(2)} | Email: {order.email}
+                            </p>
+                            <p className="text-text-muted text-xs">**Shipping to:** {order.address}</p>
+                        </div>
+
+                        {/* ITEMS LIST */}
+                        <div className="border-border mt-3 border-t pt-3">
+                            <p className="text-text-default mb-1 text-sm font-semibold">Items Purchased:</p>
+                            <ul className="text-text-muted ml-4 list-disc text-xs">
+                                {order.items.map((item, index) => (
+                                    <li key={index}>
+                                        {item.name} (x{item.quantity}) @ ₱{item.price.toFixed(2)} each
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </motion.div>
+                ))}
+            </div>
+        </motion.section>
+    );
+};
+
 export const App = () => {
     const navigationLink = ['Home', 'Products', 'About', 'Team', 'Shop'];
 
@@ -61,6 +109,15 @@ export const App = () => {
     useSectionObserver(setActiveLink);
 
     const [isCartOpen, setIsCartOpen] = useState(false);
+
+    // NEW: State to track multiple orders
+    const [orders, setOrders] = useState([]);
+
+    // NEW: Function to generate unique IDs
+    const getNewOrderId = () => {
+        // Simple sequential ID based on array length (starting at 1001)
+        return orders.length + 1001;
+    };
 
     const SAMPLE_PRODUCTS = [
         { id: 1, name: 'Ponytails', src: ponytails, cost: 35.0 },
@@ -91,6 +148,46 @@ export const App = () => {
     const handleClearCart = () => {
         setCartItems([]);
     };
+
+    // UPDATED: The handleCheckout logic is now for multi-order tracking
+    const handleCheckout = useCallback(
+        (email, address, selectedPayment) => {
+            if (cartItems.length === 0) return false;
+
+            // Basic Client-Side Validation Check
+            if (!email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g)) {
+                alert('❌ Invalid email address.');
+                return false;
+            }
+            if (!email.trim() || !address.trim() || !selectedPayment) {
+                alert('🛑 Please complete all required fields (Email, Address, Payment).');
+                return false;
+            }
+
+            const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+            // --- SUCCESS: Create a new order object ---
+            const newOrder = {
+                id: getNewOrderId(),
+                total: total,
+                email: email,
+                address: address, // Saved detail
+                payment: selectedPayment,
+                date: new Date().toISOString(),
+                currentStatus: 'Preparing', // Initial status
+                items: cartItems.map((item) => ({ name: item.name, quantity: item.quantity, price: item.price })),
+            };
+
+            // Add the new order to the start of the orders array (most recent first)
+            setOrders((prevOrders) => [newOrder, ...prevOrders]);
+
+            handleClearCart();
+            setIsCartOpen(false);
+
+            return true;
+        },
+        [cartItems, orders.length]
+    );
 
     const totalQuantity = cartItems.reduce((totalAcc, item) => totalAcc + item.quantity, 0);
 
@@ -233,13 +330,16 @@ export const App = () => {
                     <Button className="h-12 w-28" text={totalQuantity > 0 ? `Cart (${totalQuantity})` : 'Cart'} variant="primary" onClick={() => setIsCartOpen(true)} />
                 </motion.section>
 
-                <motion.section className="flex h-full w-full items-center justify-around rounded-lg shadow-sm" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.3 }}>
+                <motion.section className="flex w-full items-center justify-around rounded-lg shadow-sm" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.3 }}>
                     {SAMPLE_PRODUCTS.map((product) => (
                         <ItemCard key={product.id} itemName={product.name} itemSrc={product.src} itemCost={`₱${product.cost.toFixed(2)}`} addToCart={() => handleAddToCart(product)} />
                     ))}
                 </motion.section>
 
-                {isCartOpen && <CartModal items={cartItems} onClose={() => setIsCartOpen(false)} onRemove={handleRemoveFromCart} clearCart={handleClearCart} />}
+                {/* NEW: Render the status section with the entire orders array */}
+                <OrderStatusSection orders={orders} />
+
+                {isCartOpen && <CartModal items={cartItems} onClose={() => setIsCartOpen(false)} onRemove={handleRemoveFromCart} clearCart={handleClearCart} handleCheckout={handleCheckout} />}
             </ShopLayout>
         </>
     );
